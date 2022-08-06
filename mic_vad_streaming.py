@@ -152,18 +152,12 @@ class VADAudio(Audio):
                     ring_buffer.clear()
 
 def main(ARGS):
-    # Load DeepSpeech model
-    if os.path.isdir(ARGS.model):
-        model_dir = ARGS.model
-        ARGS.model = os.path.join(model_dir, 'output_graph.pb')
-        ARGS.scorer = os.path.join(model_dir, ARGS.scorer)
 
+    model_path = "C:/Users/StevenMendezChipatec/Steven/Hiro/NLP/Deepspeech/Models/output_graph_es.pbmm"
+    scorer_path = "C:/Users/StevenMendezChipatec/Steven/Hiro/NLP/Deepspeech/Models/kenlm_es.scorer"
     print('Initializing model...')
-    logging.info("ARGS.model: %s", ARGS.model)
-    model = deepspeech.Model(ARGS.model)
-    if ARGS.scorer:
-        logging.info("ARGS.scorer: %s", ARGS.scorer)
-        model.enableExternalScorer(ARGS.scorer)
+    model = deepspeech.Model(model_path)
+    model.enableExternalScorer(scorer_path)
 
     # Start audio with VAD
     vad_audio = VADAudio(aggressiveness=ARGS.vad_aggressiveness,
@@ -209,11 +203,6 @@ if __name__ == '__main__':
                         help="Save .wav files of utterences to given directory")
     parser.add_argument('-f', '--file',
                         help="Read from .wav file instead of microphone")
-
-    parser.add_argument('-m', '--model', required=True,
-                        help="Path to the model (protocol buffer binary file, or entire directory containing all standard-named files for model)")
-    parser.add_argument('-s', '--scorer',
-                        help="Path to the external scorer file.")
     parser.add_argument('-d', '--device', type=int, default=None,
                         help="Device input index (Int) as listed by pyaudio.PyAudio.get_device_info_by_index(). If not provided, falls back to PyAudio.get_default_device().")
     parser.add_argument('-r', '--rate', type=int, default=DEFAULT_SAMPLE_RATE,
