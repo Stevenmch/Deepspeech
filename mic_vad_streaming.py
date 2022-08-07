@@ -187,6 +187,9 @@ def main(ARGS):
                 wav_data = bytearray()
             text = stream_context.finishStream()
             print("Recognized: %s" % text)
+            # Start other program
+            if text == "steven":
+                print("Se inicio programa")
             stream_context = model.createStream()
 
 if __name__ == '__main__':
